@@ -1,0 +1,38 @@
+{
+	'pk': '8503553855',
+	'username': 'seamo.m',
+	'full_name': '24Carrrot',
+	'is_private': False,
+	'profile_pic_url': HttpUrl(
+		'https://instagram.fdub5-1.fna.fbcdn.net/v/t51.2885-19/s150x150/91839076_925020541266909_3115713673318891520_n.jpg?_nc_ht=instagram.fdub5-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=F6O-M8Qw2nYAX8po8YU&edm=ABfd0MgBAAAA&ccb=7-4&oh=00_AT_U0agDwyYlINP5EttVe8bNV7eOGx9jm9oeIcmckK-nxg&oe=62065E79&_nc_sid=7bff83',
+		scheme='https',
+		host='instagram.fdub5-1.fna.fbcdn.net',
+		tld='net',
+		host_type='domain',
+		port='443',
+		path='/v/t51.2885-19/s150x150/91839076_925020541266909_3115713673318891520_n.jpg',
+		query='_nc_ht=instagram.fdub5-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=F6O-M8Qw2nYAX8po8YU&edm=ABfd0MgBAAAA&ccb=7-4&oh=00_AT_U0agDwyYlINP5EttVe8bNV7eOGx9jm9oeIcmckK-nxg&oe=62065E79&_nc_sid=7bff83'
+	),
+	'profile_pic_url_hd': HttpUrl(
+		'https://instagram.fdub5-1.fna.fbcdn.net/v/t51.2885-19/s320x320/91839076_925020541266909_3115713673318891520_n.jpg?_nc_ht=instagram.fdub5-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=F6O-M8Qw2nYAX8po8YU&edm=ABfd0MgBAAAA&ccb=7-4&oh=00_AT94daqQeHyxJVMvRLqUgd8_1av3-vCGENE65AtoYkpkcw&oe=6204E889&_nc_sid=7bff83',
+		scheme='https',
+		host='instagram.fdub5-1.fna.fbcdn.net',
+		tld='net',
+		host_type='domain',
+		port='443',
+		path='/v/t51.2885-19/s320x320/91839076_925020541266909_3115713673318891520_n.jpg',
+		query='_nc_ht=instagram.fdub5-1.fna.fbcdn.net&_nc_cat=109&_nc_ohc=F6O-M8Qw2nYAX8po8YU&edm=ABfd0MgBAAAA&ccb=7-4&oh=00_AT94daqQeHyxJVMvRLqUgd8_1av3-vCGENE65AtoYkpkcw&oe=6204E889&_nc_sid=7bff83'
+	),
+	'is_verified': False,
+	'media_count': 24,
+	'follower_count': 234,
+	'following_count': 925,
+	'biography': 'Programmer / Producer\nTaking commisions',
+	'external_url': 'https://open.spotify.com/artist/2W7Hw0AKU9UaqkfqGy5KnR?si=cpjihUgAT22vhGYL2e9iuQ&utm_source=copy-link&dl_branch=1',
+	'is_business': False,
+	'public_email': None,
+	'contact_phone_number': None,
+	'business_contact_method': 'UNKNOWN',
+	'business_category_name': None,
+	'category_name': 'Producer'
+}
