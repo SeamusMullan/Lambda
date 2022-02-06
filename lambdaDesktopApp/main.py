@@ -4,13 +4,9 @@ import matplotlib
 matplotlib.use('Qt5Agg')
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
 from matplotlib.figure import Figure
-import os
-import instaloader
-import threading
 import webbrowser
-import qdarkstyle
-
-
+from qt_material import apply_stylesheet, QtStyleTools
+import threading
 class MplCanvas(FigureCanvasQTAgg):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
@@ -18,13 +14,13 @@ class MplCanvas(FigureCanvasQTAgg):
         self.axes = fig.add_subplot(111)
         super(MplCanvas, self).__init__(fig)
 
-class Ui(QtWidgets.QMainWindow):
+class Ui(QtWidgets.QMainWindow, QtStyleTools):
     def __init__(self):
         super(Ui, self).__init__()
         uic.loadUi("MainWindow.ui", self)
-        # scale with the screen size
+        self.apply_stylesheet(app, "dark_red.xml")
         self.setWindowTitle('Lambda')
-        self.setWindowIcon(QtGui.QIcon('lambda.png'))
+        self.setWindowIcon(QtGui.QIcon('lambda.svg'))
         self.setFixedSize(1200, 600)
         self.show()
 
@@ -32,18 +28,11 @@ class Ui(QtWidgets.QMainWindow):
                 print("Opens Github")
                 webbrowser.open("https://github.com/seamusmullan/CherryBomb")
 
-    def tableSetup(self):
-        headers = ["Profile Link", "Platform", "Followers", "Following", "Post Amount", "Synced"]
-        for i in range(0, len(headers)):
-            self.tableWidget.insertColumn(i)
-        self.tableWidget.setHorizontalHeaderLabels(headers)
 
-    def addToTable(self, item):
-        self.tableWidget.insertRow(self.tableWidget.rowCount())
-        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(item))
+    ## MISC FUNCTIONS
 
     def progBarAdd(self, n):
-        self.progBar.setValue(self.progBar.value() + n)
+            self.progBar.setValue(self.progBar.value() + n)
 
     def progBarSet(self, n):
         self.progBar.setValue(n)
@@ -58,34 +47,66 @@ class Ui(QtWidgets.QMainWindow):
     def errorWindow(self, text):
         self.errorWindow = QtWidgets.QMessageBox.critical(self, 'Error', text, QtWidgets.QMessageBox.Ok)
         self.errorWindow.show()
-    
+
+
+    ## TABLE FUNCTIONS
+
+    def tableSetup(self):
+        headers = ["Nickname", "Platform", "Followers", "Following", "No. Posts", "Link", "Bio"]
+        for i in range(0, len(headers)):
+            self.tableWidget.insertColumn(i)
+        self.tableWidget.setHorizontalHeaderLabels(headers)
+
+    def addToTable(self, item, platform=None, followers=None, following=None, posts=None, link=None, bio=None):
+        self.tableWidget.insertRow(self.tableWidget.rowCount())
+        self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 0, QtWidgets.QTableWidgetItem(item))
+        
+        ## DETAILS
+
+        if platform != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 1, QtWidgets.QTableWidgetItem(platform))
+        if followers != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 2, QtWidgets.QTableWidgetItem(str(followers)))
+        if following != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 3, QtWidgets.QTableWidgetItem(str(following)))
+        if posts != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 4, QtWidgets.QTableWidgetItem(str(posts)))
+        if link != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 5, QtWidgets.QTableWidgetItem(link))
+        if bio != None:
+            self.tableWidget.setItem(self.tableWidget.rowCount() - 1, 6, QtWidgets.QTableWidgetItem(bio))
+
+
     ## ADD ACCOUNT FUNCTIONS
 
     def inputWindow(self, text):
         x = QtWidgets.QInputDialog.getText(self, 'Input Dialog', text)
-        if x[1]:
-            self.addToTable(x[0])
+        if x != None:
+            pass
         else:
-            self.errorWindow(str("No Username Entered"))
+            self.errorWindow(str("Nothing Entered"))
+        return x[0]
             
+
+    def addAccount(self, platform):
+        link = str(self.inputWindow(str("Enter Link to Account")))
+        nickname = str(self.inputWindow(str("Enter Nickname for Account")))
+        self.addToTable(nickname, platform, link=link)
+
 
     def buttonSetup(self):
         self.actionGithub.triggered.connect(lambda: webbrowser.open("https://github.com/seamusmullan"))
 
-    	## Add Account Buttons
-        # IGButton, FBButton, TWButton, SCButton, TTButton
-
-        self.IGButton.clicked.connect(lambda: self.inputWindow(str("Enter Instagram Username")))
-        self.FBButton.clicked.connect(lambda: self.inputWindow(str("Enter Facebook Username")))
-        self.TWButton.clicked.connect(lambda: self.inputWindow(str("Enter Twitter Username")))
-        self.SCButton.clicked.connect(lambda: self.inputWindow(str("Enter Snapchat Username")))
-        self.TTButton.clicked.connect(lambda: self.inputWindow(str("Enter TikTok Username")))
+        self.IGButton.clicked.connect(lambda: self.addAccount("Instagram"))
+        self.FBButton.clicked.connect(lambda: self.addAccount("Facebook"))
+        self.TWButton.clicked.connect(lambda: self.addAccount("Twitter"))
+        self.SCButton.clicked.connect(lambda: self.addAccount("Snapchat"))
+        self.TTButton.clicked.connect(lambda: self.addAccount("TikTok"))
         
 
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyleSheet(qdarkstyle.load_stylesheet())
     window = Ui()
     window.buttonSetup()
     window.progBarReset()

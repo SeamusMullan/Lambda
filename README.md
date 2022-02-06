@@ -1,3 +1,3 @@
 # LAMBDA
-## Localised Account Manager for Bulk Downloading publically open Accounts
+## Localised Account Manager for Bulk Downloading public Accounts
 ### Developed by [Seamus Mullan](https://github.com/seamusmullan)
