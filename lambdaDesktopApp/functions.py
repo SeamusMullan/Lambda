@@ -1,41 +1,33 @@
-from inspect import getclosurevars
 from instagrapi import *
 import beeprint as bp
+import instaloader
 
+## Instagram Client Functions
 
-## Client Functions
-
-def getClientObjectLogin(uname, pw):
+def clientLoginIG(uname, pw):
     client = Client()
     client.login(uname, pw)
     return client
 
 
-def getClientObject():
-    client = Client()
-    return client
+def getUserIG(client, username):
+    id = client.user_id_from_username(username)
+    info = client.user_info(id).dict()
+    return info
 
 
-## Get User * Functions
-
-def getUser(client, user_id):
-    user = client.user_info(user_id)
-    return user
-
-
-def getUserId(client, username):
-    user_id = client.user_id_from_username(username)
-    return user_id
+def iloaderDownloadUserPublic(target):
+    loader = instaloader.Instaloader()
+    profile = instaloader.Profile.from_username(loader.context, target)
+    for post in profile.get_posts():
+        loader.download_post(post, target=profile.username)
 
 
-def getUserFollowers(client, user_id):
-    followers = client.user_followers(user_id)
-    return followers
+def iloaderDownloadUserPrivate(target, loginUname, loginPW):
+    loader = instaloader.Instaloader()
+    loader.login(loginUname, loginPW)
+    profile = instaloader.Profile.from_username(loader.context, target)
+    loader.download_stories(profile)
 
 
-
-# x = getClientObjectLogin("calmingnatureposts", "xN353@uxr")
-
-# with open("test.txt", "w") as f:
-#     f.write(str(getUser(x, getUserId(x, "seamo.m")).dict()))
 
