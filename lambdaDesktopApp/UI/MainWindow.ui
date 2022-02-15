@@ -170,6 +170,14 @@
      </widget>
     </widget>
     <widget class="QWidget" name="Database">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>171</width>
+       <height>371</height>
+      </rect>
+     </property>
      <attribute name="label">
       <string>Database</string>
      </attribute>
@@ -226,6 +234,7 @@
      <string>Info</string>
     </property>
     <addaction name="actionGithub"/>
+    <addaction name="actionMPL_Window"/>
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
@@ -274,6 +283,11 @@
   <action name="actionDetails">
    <property name="text">
     <string>Details</string>
+   </property>
+  </action>
+  <action name="actionMPL_Window">
+   <property name="text">
+    <string>MPL Window</string>
    </property>
   </action>
  </widget>

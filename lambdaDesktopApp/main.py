@@ -1,4 +1,3 @@
-from getpass import getuser
 import sys
 from PyQt5 import QtCore, QtWidgets, uic, QtGui
 import matplotlib
@@ -13,22 +12,26 @@ import sqlite3
 import os
 import time
 
-class MplCanvas(FigureCanvasQTAgg):
+# class MplCanvas(FigureCanvasQTAgg, QtStyleTools):
 
-    def __init__(self, parent=None, width=5, height=4, dpi=100):
-        fig = Figure(figsize=(width, height), dpi=dpi)
-        self.axes = fig.add_subplot(111)
-        super(MplCanvas, self).__init__(fig)
+#     def __init__(self, parent=None, width=5, height=4, dpi=100):
+#         fig = Figure(figsize=(width, height), dpi=dpi)
+#         self.axes = fig.add_subplot(111)
+#         super(MplCanvas, self).__init__(fig)
+#         self.setWindowTitle('Lambda - Database Search')
+#         self.setWindowIcon(QtGui.QIcon('Icons/lambda.svg'))
+#         self.apply_stylesheet(app, "dark_red.xml")
+#         self.setFixedSize(1200, 600)
+#         self.show()
 
 class DB_Search(QtWidgets.QMainWindow, QtStyleTools):
     def __init__(self):
         super(DB_Search, self).__init__()
-        uic.loadUi('DatabaseSearch.ui', self)
+        uic.loadUi('UI/DatabaseSearch.ui', self)
         self.setWindowTitle('Lambda - Database Search')
-        self.setWindowIcon(QtGui.QIcon('lambda.svg'))
+        self.setWindowIcon(QtGui.QIcon('Icons/lambda.svg'))
         self.setFixedSize(1200, 600)
         self.setupButtons()
-        self.tableSetup()
         self.show()
         
 
@@ -58,13 +61,14 @@ class DB_Search(QtWidgets.QMainWindow, QtStyleTools):
 
 
 
+
 class Ui(QtWidgets.QMainWindow, QtStyleTools):
     def __init__(self):
         super(Ui, self).__init__()
-        uic.loadUi("MainWindow.ui", self)
+        uic.loadUi("UI/MainWindow.ui", self)
         self.apply_stylesheet(app, "dark_red.xml")
         self.setWindowTitle('Lambda')
-        self.setWindowIcon(QtGui.QIcon('lambda.svg'))
+        self.setWindowIcon(QtGui.QIcon('Icons/lambda.svg'))
         self.setFixedSize(1200, 600)
         self.show()
 
@@ -76,14 +80,13 @@ class Ui(QtWidgets.QMainWindow, QtStyleTools):
             self.dbSearchWindow.setWindowTitle(f"Lambda - Database Search - {database}")
         else:
             self.dbSearchWindow.setWindowTitle(f"Lambda - Database Search")
-        self.dbSearchWindow.setWindowIcon(QtGui.QIcon('lambda.svg'))
+        self.dbSearchWindow.setWindowIcon(QtGui.QIcon('Icons/lambda.svg'))
         self.dbSearchWindow.setFixedSize(1200, 600)
         self.dbSearchWindow.show()
 
-
     def GithubAction():
                 print("Opens Github")
-                webbrowser.open("https://github.com/seamusmullan/CherryBomb")
+                webbrowser.open("https://github.com/seamusmullan/Lambda")
 
 
     ## MISC FUNCTIONS
@@ -124,14 +127,14 @@ class Ui(QtWidgets.QMainWindow, QtStyleTools):
 
     def dbSetup(self, platform):
         ## if database doesn't exist, create it and add the table + columns
-        conn = sqlite3.connect(f"{platform}.db")
+        conn = sqlite3.connect(f"Database/{platform}.db")
         c = conn.cursor()
         c.execute("CREATE TABLE IF NOT EXISTS accounts (username text, platform text, followers int, following int, posts int, link text, bio text)")
         conn.commit()
         conn.close()
 
     def dbAdd(self, platform, username, link, followers, following, posts, bio):
-        conn = sqlite3.connect(f"{platform}.db")
+        conn = sqlite3.connect(f"Database/{platform}.db")
         c = conn.cursor()
         c.execute("INSERT INTO accounts VALUES (?, ?, ?, ?, ?, ?, ?)", (username, platform, followers, following, posts, link, bio))
         conn.commit()
@@ -180,14 +183,27 @@ class Ui(QtWidgets.QMainWindow, QtStyleTools):
     def addIGAccount(self, platform):
         self.dbSetup(platform)
         link = str(self.inputWindow(str("Enter Link to Account")))
-        username = str(self.inputWindow(str("Enter Username for Account")))
-        self.progBarSmooth(0, 20, 0.1)
-        # self.addToTable(nickname, platform, link=link)
-        data = getUserIG(clientLoginIG("calmingnatureposts", "xN353@uxr"), username)
-        self.progBarSmooth(20, 40, 0.2)
-        self.addToTable(username, platform, data['follower_count'], data['following_count'], data['media_count'], link, data['biography'])
-        self.dbAdd(platform, username, link, data['follower_count'], data['following_count'], data['media_count'], data['biography'])
-        self.progBarSmooth(40, 110, 0.01)
+        
+        try:
+        ## CHECK IF ACCOUNT EXISTS
+            if requests.get(link).status_code == 200:
+                username = link.split("/")[-1]
+                # print(username)
+            else:
+                ## IF ACCOUNT DOESN'T EXIST, RETURN ERROR
+                self.errorWindow(str("Account Doesn't Exist"))
+                return
+                
+
+            self.progBarSmooth(0, 20, 0.1)
+            # self.addToTable(nickname, platform, link=link)
+            data = getUserIG(clientLoginIG("calmingnatureposts", "xN353@uxr"), username)
+            self.progBarSmooth(20, 40, 0.2)
+            self.addToTable(username, platform, data['follower_count'], data['following_count'], data['media_count'], link, data['biography'])
+            self.dbAdd(platform, username, link, data['follower_count'], data['following_count'], data['media_count'], data['biography'])
+            self.progBarSmooth(40, 110, 0.01)
+        except Exception as e:
+            print("Error:", e)
 
 
     def addFBAccount(self, platform):
@@ -210,8 +226,6 @@ class Ui(QtWidgets.QMainWindow, QtStyleTools):
         pass
 
 
-
-
     def buttonSetup(self):
         ## MENU BUTTONS
         self.actionGithub.triggered.connect(lambda: webbrowser.open("https://github.com/seamusmullan"))
@@ -223,7 +237,6 @@ class Ui(QtWidgets.QMainWindow, QtStyleTools):
         self.SCButton.clicked.connect(lambda: th.Thread(target=self.addSnapchatAccount, args=("Snapchat",)).start())
         self.TTButton.clicked.connect(lambda: th.Thread(target=self.addTiktokAccount, args=("TikTok",)).start())
 
-        ## STATISTICS BUTTONS
 
 
 
