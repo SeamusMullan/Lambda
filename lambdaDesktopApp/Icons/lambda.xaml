@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--This file is compatible with Silverlight-->
+<Canvas xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" Name="svg83" Width="83" Height="89">
+  <Canvas.Resources/>
+  <!--Unknown tag: sodipodi:namedview-->
+  <Canvas Name="g50" Effect="{StaticResource Logo__a}">
+    <Path xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Name="path48" Fill="#FFBF1238" Data="M22.274 81H4l36.548-53.751L29.508 0h15.99L79 81H61.868L46.64 45.912 22.274 81Z"/>
+  </Canvas>
+</Canvas>
